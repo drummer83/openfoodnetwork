@@ -8,7 +8,7 @@
     = stylesheet_pack_tag 'mail'
   %body{:bgcolor => "#FFFFFF" }
     - unless @hide_ofn_navigation
-      %table.head-wrap{:bgcolor => "#f2f2f2"}
+      %table.wrap
         %tr
           %td
           %td.header.container
@@ -34,14 +34,19 @@
                   = yield
         %td
 
-    %table.footer-wrap
+    %table.wrap
       %tr
         %td
         %td.container
           .content
             %table
               %tr
-                %td{:align => "center"}
+                %td.text-center
+                  %p
+                    = t(".powered_html", open_food_network: footer_ofn_link)
+
+              %tr
+                %td.text-center
                   %p
                     - if platform_terms_required?
                       = link_to_platform_terms
