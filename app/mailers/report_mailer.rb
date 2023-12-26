@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ReportMailer < ApplicationMailer
+  helper MailerHelper
+
   def report_ready
     # When we are in a background job then we don't have an HTTP request object
     # and we need to tell ActiveStorage the hostname to generate URLs.
