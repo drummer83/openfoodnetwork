@@ -10,7 +10,7 @@ class ProducerMailer < ApplicationMailer
 
     load_data
 
-    I18n.with_locale(owner_locale) do
+    I18n.with_locale valid_locale(@producer.owner) do
       return unless orders?(order_cycle, producer)
 
       mail(
@@ -23,10 +23,6 @@ class ProducerMailer < ApplicationMailer
   end
 
   private
-
-  def owner_locale
-    valid_locale(@producer.owner)
-  end
 
   def load_data
     @coordinator = @order_cycle.coordinator
