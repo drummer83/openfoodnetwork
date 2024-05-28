@@ -74,6 +74,19 @@ p.callout {
   }
 }
 
+p.signoff_icons {
+  font-size: 0px;
+
+  a {
+    text-decoration: none;
+    margin-right: 5px;
+  }
+
+  a:not(.ofn-i_image) {
+    font-size: 24px;
+  }
+}
+
 p.notice {
   font-style: italic;
   font-size: 12px;
@@ -296,7 +309,7 @@ h6 {
   margin: 0 !important;
 }
 
-p, ul {
+p, ul, span.signoff {
   margin-bottom: 10px;
   font-weight: normal;
   font-size: 14px;
