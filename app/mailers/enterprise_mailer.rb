@@ -4,7 +4,6 @@ require 'devise/mailers/helpers'
 class EnterpriseMailer < ApplicationMailer
   include Devise::Mailers::Helpers
   include I18nHelper
-  helper MailerHelper
 
   def welcome(enterprise)
     @enterprise = enterprise

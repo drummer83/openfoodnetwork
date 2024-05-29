@@ -3,7 +3,6 @@
 module Spree
   class ShipmentMailer < ApplicationMailer
     include I18nHelper
-    helper MailerHelper
     helper 'checkout'
 
     def shipped_email(shipment, delivery:)

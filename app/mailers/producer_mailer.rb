@@ -2,7 +2,6 @@
 
 class ProducerMailer < ApplicationMailer
   include I18nHelper
-  helper MailerHelper
 
   def order_cycle_report(producer, order_cycle)
     @producer = producer

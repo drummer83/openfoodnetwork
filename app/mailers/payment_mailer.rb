@@ -2,7 +2,6 @@
 
 class PaymentMailer < ApplicationMailer
   include I18nHelper
-  helper MailerHelper
   helper 'checkout'
 
   def authorize_payment(payment)
