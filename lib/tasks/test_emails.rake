@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 namespace :ofn do
+  ENV["GTK_MODULES"] = ""
+  ENV["G_MESSAGES_DEBUG"] = ""
+
   desc "Send representative emails using the sample data created by `ofn:sample_data`"
   task test_emails: :environment do
     ensure_sample_data!
@@ -37,7 +40,8 @@ class EmailTestData
     "Spree::OrderMailer#confirm_email_for_customer",
     "Spree::OrderMailer#confirm_email_for_shop",
     "Spree::OrderMailer#invoice_email",
-    "Spree::ShipmentMailer#shipped_email",
+    "Spree::ShipmentMailer#shipped_email_delivery",
+    "Spree::ShipmentMailer#shipped_email_pickup",
     "Spree::TestMailer#test_email",
     "Spree::UserMailer#confirmation_instructions",
     "Spree::UserMailer#reset_password_instructions",
@@ -208,12 +212,10 @@ class EmailTestData
       Spree::OrderMailer.confirm_email_for_shop(sample_order).deliver_now
     when "Spree::OrderMailer#invoice_email"
       Spree::OrderMailer.invoice_email(sample_order).deliver_now
-    when "Spree::ShipmentMailer#shipped_email"
-      shipment = sample_shipment
-      return if shipment.blank?
-
-      Spree::ShipmentMailer.shipped_email(shipment, delivery: true).deliver_now
-      Spree::ShipmentMailer.shipped_email(shipment, delivery: false).deliver_now
+    when "Spree::ShipmentMailer#shipped_email_delivery"
+      Spree::ShipmentMailer.shipped_email(sample_shipment, delivery: true).deliver_now
+    when "Spree::ShipmentMailer#shipped_email_pickup"
+      Spree::ShipmentMailer.shipped_email(sample_shipment, delivery: false).deliver_now
     when "Spree::TestMailer#test_email"
       Spree::TestMailer.test_email(sample_user).deliver_now
     when "Spree::UserMailer#confirmation_instructions"
