@@ -290,7 +290,11 @@ class FakeBlob
     "text/csv"
   end
 
+  def expiring_service_url
+    "https://example.org/reports/sample_report.csv"
+  end
+
   def download
-    "sample_report.csv"
+    "sample report content"
   end
 end
