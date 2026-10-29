@@ -225,7 +225,7 @@ class EmailTestData
     when "SubscriptionMailer#confirmation_email"
       SubscriptionMailer.confirmation_email(sample_order).deliver_now
     when "SubscriptionMailer#confirmation_summary_email"
-      SubscriptionMailer.confirmation_summary_email(subscription_summary(:confirmation)).deliver_now
+      SubscriptionMailer.confirmation_summary_email(subscription_summary).deliver_now
     when "SubscriptionMailer#empty_email"
       SubscriptionMailer.empty_email(sample_order, []).deliver_now
     when "SubscriptionMailer#failed_payment_email"
@@ -233,19 +233,23 @@ class EmailTestData
     when "SubscriptionMailer#placement_email"
       SubscriptionMailer.placement_email(sample_order, []).deliver_now
     when "SubscriptionMailer#placement_summary_email"
-      SubscriptionMailer.placement_summary_email(subscription_summary(:placement)).deliver_now
+      SubscriptionMailer.placement_summary_email(subscription_summary).deliver_now
     else
       raise "No sender defined for #{key}"
     end
   end
 
-  def subscription_summary(type)
-    Struct.new(:shop_id, :type, :orders).new(sample_distributor.id, type, [sample_order])
+  def subscription_summary
+    summary = OrderManagement::Subscriptions::Summary.new(sample_distributor.id)
+    summary.record_order(sample_order)
+    summary.record_success(sample_order)
+    summary
   end
 
   def sample_order
-    @sample_order ||= Spree::Order.complete.includes(:line_items).find { |order| order.line_items.any? } ||
-      Spree::Order.order(:id).last
+    @sample_order ||= Spree::Order.complete.includes(:line_items).find do |order|
+      order.line_items.any?
+    end || Spree::Order.order(:id).last
   end
 
   def sample_shipment
@@ -274,15 +278,6 @@ class EmailTestData
 
   def sample_payment
     @sample_payment ||= sample_order&.payments&.first || Spree::Payment.order(:id).last
-  end
-
-  def override_recipient(mail)
-    recipient = load_email_config["recipient"]
-    return if recipient.blank?
-
-    mail.to = [recipient]
-    mail.cc = nil
-    mail.bcc = nil
   end
 end
 
